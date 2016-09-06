@@ -49,7 +49,7 @@ function SkygearChatContainer() {
     query.transientInclude('conversation');
     return skygear.publicDB.query(query).then(function(records) {
       if (records.length > 0) {
-        return records[0];
+        return records[0]._transient.conversation;
       }
       throw new Error('no conversation found');
     });
@@ -60,7 +60,14 @@ function SkygearChatContainer() {
     query.equalTo('user', skygear.currentUser.id);
     query.transientInclude('user');
     query.transientInclude('conversation');
-    return skygear.publicDB.query(query);
+    return skygear.publicDB.query(query).then(function(records) {
+      if (records.length > 0) {
+        return records.map(function(record) {
+          return record._transient.conversation;
+        });
+      }
+      throw new Error('no conversation found');
+    });
   };
 
   this.deleteConversation = function(conversation_id) {
