@@ -71,13 +71,15 @@ function SkygearChatContainer() {
   };
 
   this.deleteConversation = function(conversation_id) {
-    return this.getConversation(conversation_id).then(function(conversation) {
+    return this.getConversation(conversation_id).then(function(userConversation) {
+      const conversation = userConversation.$transient.conversation;
       return skygear.publicDB.del(conversation);
     });
   };
 
   this.updateConversation = function(conversation_id, changes) {
-    return this.getConversation(conversation_id).then(function(conversation) {
+    return this.getConversation(conversation_id).then(function(userConversation) {
+      const conversation = userConversation.$transient.conversation;
       if (changes.title !== undefined) {
         conversation.title = changes.title;
       }
@@ -87,7 +89,8 @@ function SkygearChatContainer() {
   };
 
   this.addParticipants = function(conversation_id, participant_ids) {
-    return this.getConversation(conversation_id).then(function(conversation) {
+    return this.getConversation(conversation_id).then(function(userConversation) {
+      const conversation = userConversation.$transient.conversation;
       conversation.participant_ids = _.union(
           conversation.participant_ids, participant_ids);
 
@@ -96,7 +99,8 @@ function SkygearChatContainer() {
   };
 
   this.removeParticipants = function(conversation_id, participant_ids) {
-    return this.getConversation(conversation_id).then(function(conversation) {
+    return this.getConversation(conversation_id).then(function(userConversation) {
+      const conversation = userConversation.$transient.conversation;
       conversation.participant_ids = _.difference(
           _.unique(conversation.participant_ids), participant_ids);
       conversation.admin_ids = _.difference(
@@ -107,7 +111,8 @@ function SkygearChatContainer() {
   };
 
   this.addAdmins = function(conversation_id, admin_ids) {
-    return this.getConversation(conversation_id).then(function(conversation) {
+    return this.getConversation(conversation_id).then(function(userConversation) {
+      const conversation = userConversation.$transient.conversation;
       conversation.admin_ids = _.union(
           conversation.admin_ids, admin_ids);
 
@@ -116,7 +121,8 @@ function SkygearChatContainer() {
   };
 
   this.removeAdmins = function(conversation_id, admin_ids) {
-    return this.getConversation(conversation_id).then(function(conversation) {
+    return this.getConversation(conversation_id).then(function(userConversation) {
+      const conversation = userConversation.$transient.conversation;
       conversation.admin_ids = _.difference(
           _.unique(conversation.admin_ids), admin_ids);
 
